@@ -6,12 +6,12 @@ import Seo from "../components/seo"
 
 const SecondPage = () => (
   <Layout>
-    <h1>Hi from the second page</h1>
-    <p>Welcome to page 2</p>
-    <Link to="/">Go back to the homepage</Link>
+    <h1>Analyse pratique pro</h1>
+    <p>TODO</p>
+    <Link to="/">Home</Link>
   </Layout>
 )
 
-export const Head = () => <Seo title="Page two" />
+export const Head = () => <Seo title="Analyse pratique pro" />
 
 export default SecondPage
