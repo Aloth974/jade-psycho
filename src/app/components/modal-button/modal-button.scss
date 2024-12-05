@@ -1,0 +1,34 @@
+.modal-button {
+  background-image: url('../../images/ink-stain.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  padding: 4em 5em;
+  text-align: center;
+  text-shadow: 1px 1px 4px black;
+  text-transform: uppercase;
+  transition: box-shadow 0.3s;
+
+  &.lavender {
+    background-image: url('../../images/ink-stain-lavender.png');
+    filter: drop-shadow(20px 0px 4px #99D9EA);
+  }
+
+  &.turquoise {
+    background-image: url('../../images/ink-stain-turquoise.png');
+    filter: drop-shadow(20px 0px 4px #EFE4B0);
+  }
+
+  &.yellow {
+    background-image: url('../../images/ink-stain-yellow.png');
+    filter: drop-shadow(20px 0px 4px #C8BFE7);
+  }
+}
+
+.no-touch .modal-button:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
