@@ -9,11 +9,10 @@ main {
 
 	.page {
 		padding-top: 10%;
-		// margin-bottom: 10%;
 		height: calc(100% - 20%);
 
 		@media (max-width: 480px) {
-			margin-bottom: 30%;
+			padding-top: 20%;
 		}
 	}
 }

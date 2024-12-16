@@ -1,44 +1,35 @@
-import InkedModal from "../components/inked-modal/inked-modal";
+import ContentAnalyse from "@/app/components/content/analyse";
+import ContentFormations from "@/app/components/content/formations";
+import ContentPresentation from "@/app/components/content/presentation";
+import ContentSoins from "@/app/components/content/soins";
+import InkedModal from "@/app/components/inked-modal/inked-modal";
 
 import './page.scss';
 
 export default function Page() {
   return (
     <div className="page-grid-parent">
-      <div className="page-grid-element soins">
-        <InkedModal buttonClassName="turquoise" buttonText="Soins à la personne">
-          <h2>Soins à la personne</h2>
+      <div className="page-grid-element presentation">
+        <InkedModal buttonText="Qui suis-je ?" title="Présentation personnelle ">
+          <ContentPresentation />
+        </InkedModal>
+      </div>
 
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad modi repellendus, optio eveniet eligendi molestiae?
-            Fugiat, temporibus! A rerum pariatur neque laborum earum, illum voluptatibus eum voluptatem fugiat, porro animi
-            tempora? Sit harum nulla, nesciunt molestias, iusto aliquam aperiam est qui possimus reprehenderit ipsam ea aut.
-          </p>
+      <div className="page-grid-element soins">
+        <InkedModal buttonText="Soins à la personne" title="Accompagnement et soins dédiés à la santé mentale et au bien-être">
+          <ContentSoins />
         </InkedModal>
       </div>
 
       <div className="page-grid-element formations">
-        <InkedModal buttonClassName="yellow" buttonText="Formations">
-          <h2>Formations</h2>
-
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad modi repellendus, optio eveniet eligendi molestiae?
-            Fugiat, temporibus! A rerum pariatur neque laborum earum, illum voluptatibus eum voluptatem fugiat, porro animi
-            tempora? Sit harum nulla, nesciunt molestias, iusto aliquam aperiam est qui possimus reprehenderit ipsam ea aut.
-          </p>
+        <InkedModal buttonText="Formations" title="Formations pour une meilleure compréhension des particularités mentales des enfants">
+          <ContentFormations />
         </InkedModal>
       </div>
 
       <div className="page-grid-element analyse">
-        <InkedModal buttonClassName="lavender" buttonText="Analyse pratique pro">
-          <h2>Analyse pratique pro</h2>
-
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad modi repellendus, optio eveniet eligendi molestiae?
-            Fugiat, temporibus! A rerum pariatur neque laborum earum, illum voluptatibus eum voluptatem fugiat, porro animi
-            tempora? Sit harum nulla, nesciunt molestias, iusto aliquam aperiam est qui possimus reprehenderit ipsam ea aut
-            vero! Eius, dignissimos esse eligendi veniam.
-          </p>
+        <InkedModal buttonText="Analyse pratique pro" title="Analyses de pratiques professionnelles en milieu de la petite enfance et de l’enfance, dans un contexte d’inclusion">
+          <ContentAnalyse />
         </InkedModal>
       </div>
     </div>

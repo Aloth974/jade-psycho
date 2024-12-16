@@ -5,10 +5,10 @@ import React from 'react';
 import './inked-modal.scss';
 import ModalButton from '../modal-button/modal-button';
 
-export default function InkPage({ buttonClassName, buttonText, children }: Readonly<{
-  buttonClassName: string;
+export default function InkPage({ buttonText, children, title }: Readonly<{
   buttonText: string;
   children: React.ReactNode;
+  title: string;
 }>) {
   const [layerDimensions, setLayerDimensions] = React.useState({ height: '0px', width: '0px' });
   const [isTransitioning, setTransitioning] = React.useState(false);
@@ -78,7 +78,7 @@ export default function InkPage({ buttonClassName, buttonText, children }: Reado
     <>
       <div className="cd-main-content">
         <div className="center">
-          <ModalButton className={buttonClassName} onClick={handleOpen}>
+          <ModalButton onClick={handleOpen}>
             {buttonText}
           </ModalButton>
         </div>
@@ -86,7 +86,12 @@ export default function InkPage({ buttonClassName, buttonText, children }: Reado
 
       <div className={`cd-modal${modalOpened ? ' visible' : ''}`}>
         <div className="modal-content">
-          {children}
+          <h2>
+            {title}
+          </h2>
+          <div className="modal-content-text">
+            {children}
+          </div>
         </div>
 
         <a href="#0" className="modal-close" onClick={handleClose}>Close</a>

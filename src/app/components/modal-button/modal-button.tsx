@@ -6,7 +6,7 @@ import './modal-button.scss';
 
 export default function ModalButton({ children, className, ...restProps }: Readonly<{
   children: React.ReactNode;
-  className: string;
+  className?: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   [x: string]: unknown;
 }>) {
