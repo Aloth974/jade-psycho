@@ -1,0 +1,23 @@
+header {
+	backdrop-filter: blur(12px);
+	background: rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.2);
+	height: 10%;
+	line-height: 10%;
+	position: fixed;
+	text-align: center;
+	text-shadow: 1px 1px 4px black;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+
+	h1 {
+		align-items: center;
+		color: white;
+		display: flex;
+		font-size: 36px;
+		height: 100%;
+		justify-content: center;
+		letter-spacing: 4px;
+	}
+}

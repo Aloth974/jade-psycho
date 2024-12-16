@@ -1,9 +1,11 @@
 import InkedModal from "../components/inked-modal/inked-modal";
 
+import './page.scss';
+
 export default function Page() {
   return (
-    <div className="m-4 grid grid-cols-3 grid-rows-3" style={{ height: "calc(100vh - 20%)" }}>
-      <div className="row-start-1 row-end-1 col-start-1 col-start-1 self-center">
+    <div className="page-grid-parent">
+      <div className="page-grid-element soins">
         <InkedModal buttonClassName="turquoise" buttonText="Soins à la personne">
           <h2>Soins à la personne</h2>
 
@@ -15,7 +17,7 @@ export default function Page() {
         </InkedModal>
       </div>
 
-      <div className="row-start-2 row-end-2 col-start-3 col-start-3 self-center">
+      <div className="page-grid-element formations">
         <InkedModal buttonClassName="yellow" buttonText="Formations">
           <h2>Formations</h2>
 
@@ -27,7 +29,7 @@ export default function Page() {
         </InkedModal>
       </div>
 
-      <div className="row-start-3 row-end-3 col-start-2 col-start-2 self-center">
+      <div className="page-grid-element analyse">
         <InkedModal buttonClassName="lavender" buttonText="Analyse pratique pro">
           <h2>Analyse pratique pro</h2>
 

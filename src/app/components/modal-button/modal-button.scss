@@ -1,34 +1,30 @@
 .modal-button {
-  background-image: url('../../images/ink-stain.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-color: #000;
+  border-radius: 0.5rem;
+  border: 0;
+  box-shadow: 0 0 2rem white;
   color: #ffffff;
+  cursor: pointer;
   display: inline-block;
   font-size: 1.2rem;
-  font-weight: 700;
   letter-spacing: .1em;
-  padding: 4em 5em;
+  outline: 0;
+  overflow: hidden;
+  padding: 1rem 2rem;
+  position: relative;
   text-align: center;
-  text-shadow: 1px 1px 4px black;
+  text-decoration: underline;
+  text-decoration-color: transparent;
   text-transform: uppercase;
-  transition: box-shadow 0.3s;
+  transition: 0.5s;
 
-  &.lavender {
-    background-image: url('../../images/ink-stain-lavender.png');
-    filter: drop-shadow(20px 0px 4px #99D9EA);
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: white;
+    box-shadow: 0 0 1rem black;
   }
 
-  &.turquoise {
-    background-image: url('../../images/ink-stain-turquoise.png');
-    filter: drop-shadow(20px 0px 4px #EFE4B0);
+  @media (max-width: 480px) {
+    width: 95%;
   }
-
-  &.yellow {
-    background-image: url('../../images/ink-stain-yellow.png');
-    filter: drop-shadow(20px 0px 4px #C8BFE7);
-  }
-}
-
-.no-touch .modal-button:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }

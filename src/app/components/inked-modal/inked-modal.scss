@@ -78,7 +78,8 @@ $color-3: #ffffff; // White
 $color-4: #402f44; // Blackcurrant
 $color-5: #e4dcca; // Pearl Bush
 $primary-font: 'PT Sans', sans-serif;
-$secondary-font: 'IM Fell Double Pica', serif;
+// $secondary-font: 'IM Fell Double Pica', serif;
+$secondary-font: var(--font-luciole-regular);
 
 /* --------------------------------
 
@@ -109,6 +110,11 @@ Modal window
   color: #e4dcca;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: justify;
+
+  @media (max-width: 480px) {
+    padding: 20% 5%;
+  }
 }
 
 .cd-modal h2 {

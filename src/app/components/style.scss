@@ -6,13 +6,15 @@
 
 @import '../partials/layout'; // responsive grid and media queries
 
-/* -------------------------------- 
+/* --------------------------------
 
 Primary style
 
 -------------------------------- */
 
-*, *::after, *::before {
+*,
+*::after,
+*::before {
 	box-sizing: border-box;
 }
 
@@ -25,6 +27,7 @@ body {
 		size: 1.6rem;
 		family: $primary-font; // variables inside partials > _variables.scss
 	}
+
 	color: $color-1;
 	background-color: $color-3;
 }
@@ -34,7 +37,7 @@ a {
 	text-decoration: none;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Patterns - reusable parts of our design
 
@@ -44,7 +47,7 @@ Patterns - reusable parts of our design
 	display: inline-block;
 	padding: 1.6em 2.4em;
 	font-size: 1.4rem;
-	letter-spacing: .15em;	
+	letter-spacing: .15em;
 	color: $color-3;
 	font-weight: 700;
 	text-transform: uppercase;
@@ -58,7 +61,7 @@ Patterns - reusable parts of our design
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Typography
 
@@ -76,7 +79,7 @@ h1 {
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Main Content
 
@@ -99,9 +102,9 @@ Main Content
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
-Modal window 
+Modal window
 
 -------------------------------- */
 
@@ -157,12 +160,12 @@ Modal window
 		width: 45px;
 		border-radius: 50%;
 		background: rgba(#000, .3) url(../img/cd-icon-close.svg) no-repeat center center;
-		
+
 		/* image replacement */
 		overflow: hidden;
 		text-indent: 100%;
 		white-space: nowrap;
-		
+
 		visibility: hidden;
 		opacity: 0;
 		@include transform(scale(0));
@@ -196,7 +199,7 @@ Modal window
 			padding: 6em 5%;
 		}
 
-		.modal-close { 
+		.modal-close {
 			height: 60px;
 			width: 60px;
 		}
@@ -207,9 +210,9 @@ Modal window
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
-Transition Layer 
+Transition Layer
 
 -------------------------------- */
 
@@ -231,7 +234,7 @@ Transition Layer
 		@include transform(translateY(-50%) translateX(-2%));
 		/* its dimentions will be overwritten using jQuery to proportionally fit the viewport */
 		height: 100%;
-		/* our sprite is composed of 25 frames */ 
+		/* our sprite is composed of 25 frames */
 		width: 2500%;
 		background: url(../img/ink.png) no-repeat 0 0;
 		background-size: 100% 100%;
@@ -262,9 +265,10 @@ Transition Layer
 		/* translateX(-2%) is used to horizontally center the first frame inside the viewport */
 		@include transform(translateY(-50%) translateX(-2%));
 	}
+
 	100% {
 		/* translateX(-98%) (2% + 96) is used to horizontally center the last frame inside the viewport  */
-   		@include transform(translateY(-50%) translateX(-98%));
+		@include transform(translateY(-50%) translateX(-98%));
 	}
 }
 
@@ -272,7 +276,8 @@ Transition Layer
 	0% {
 		@include transform(translateY(-50%) translateX(-98%));
 	}
+
 	100% {
-   		@include transform(translateY(-50%) translateX(-2%));
+		@include transform(translateY(-50%) translateX(-2%));
 	}
 }

@@ -1,22 +1,35 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Footer from "@/app/components/footer";
+import Footer from "@/app/components/layout/footer";
+import Header from "@/app/components/layout/header";
+import Main from "@/app/components/layout/main";
+import RichSnippet from "@/app/components/seo/rich-snippet";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+const lucioleRegular = localFont({
+  src: "./fonts/Luciole-Regular.ttf",
+  variable: "--font-luciole-regular",
+  weight: "100 700",
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const lucioleBold = localFont({
+  src: "./fonts/Luciole-Bold.ttf",
+  variable: "--font-luciole-bold",
+  weight: "700 900",
+});
+const lucioleRegularItalic = localFont({
+  src: "./fonts/Luciole-Regular-Italic.ttf",
+  variable: "--font-luciole-regular-italic",
+  weight: "100 700",
+});
+const lucioleBoldItalic = localFont({
+  src: "./fonts/Luciole-Bold-Italic.ttf",
+  variable: "--font-luciole-bold-italic",
+  weight: "700 900",
 });
 
 export const metadata: Metadata = {
   title: "Jade Psycho",
-  description: "Site web du cabinet de Jade Techer",
+  description: "Jade Techer Psycho soins à la personne formations analyse pratique pro 84100 orange",
   authors: { name: `@Aloth974`, url: `https://olivierleclercq.xyz` },
 };
 
@@ -28,21 +41,16 @@ export default function RootLayout({
   return (
     <html lang="fr" className="h-full">
       <body
-        className={`h-full ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`h-full ${lucioleRegular.variable} ${lucioleBold.variable} ${lucioleRegularItalic.variable} ${lucioleBoldItalic.variable} antialiased`}
       >
-        <div className="h-full flex flex-col justify-between">
-          <header>
-            <h1>
-              Jade Techer
-            </h1>
-          </header>
+        <Header />
 
-          <main>
-            {children}
-          </main>
+        <Main>
+          {children}
+        </Main>
 
-          <Footer />
-        </div>
+        <Footer />
+        <RichSnippet />
       </body>
     </html>
   );

@@ -7,11 +7,12 @@ import './modal-button.scss';
 export default function ModalButton({ children, className, ...restProps }: Readonly<{
   children: React.ReactNode;
   className: string;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
   [x: string]: unknown;
 }>) {
   return (
-    <a href="#0" className={`modal-button ${className}`} {...restProps}>
+    <button className={`modal-button ${className}`} {...restProps}>
       {children}
-    </a>
+    </button>
   );
 }
