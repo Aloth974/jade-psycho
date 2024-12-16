@@ -1,4 +1,4 @@
-const richSnippetData = `{
+const richSnippetData = {
   "@context": "https://schema.org",
   "@type": "Psycho",
   "image": [
@@ -41,12 +41,12 @@ const richSnippetData = `{
       "closes": "16:00"
     }
   ]
-}`;
+};
 
 // See https://developers.google.com/search/docs/appearance/structured-data/local-business
 export default function RichSnippet() {
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: richSnippetData }}>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(richSnippetData) }}>
     </script>
   );
 }
