@@ -13,6 +13,7 @@ main {
 
 		@media (max-width: 480px) {
 			padding-top: 20%;
+			height: calc(100% - 25%);
 		}
 	}
 }

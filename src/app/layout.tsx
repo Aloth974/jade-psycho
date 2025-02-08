@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Head from "next/head";
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+
 import Footer from "@/app/components/layout/footer";
 import Header from "@/app/components/layout/header";
 import Main from "@/app/components/layout/main";
 import RichSnippet from "@/app/components/seo/rich-snippet";
+import SocialNetworks from "@/app/components/layout/social-networks";
 import metadataConfiguration from "@/app/components/seo/metadataConfiguration";
-import Head from "next/head";
+
+config.autoAddCss = false
 
 const lucioleRegular = localFont({
   src: "./fonts/Luciole-Regular.ttf",
@@ -28,6 +34,7 @@ const lucioleBoldItalic = localFont({
   variable: "--font-luciole-bold-italic",
   weight: "700 900",
 });
+
 
 export const metadata: Metadata = metadataConfiguration;
 
@@ -63,6 +70,7 @@ export default function RootLayout({
 
         <Main>
           {children}
+          <SocialNetworks />
         </Main>
 
         <Footer />

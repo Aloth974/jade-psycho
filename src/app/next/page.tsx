@@ -8,7 +8,7 @@ import './page.scss';
 
 export default function Page() {
   return (
-    <div className="page-grid-parent">
+    <div className="next page-grid-parent">
       <div className="page-grid-element presentation">
         <InkedModal buttonText="Qui suis-je ?" title="Présentation personnelle ">
           <ContentPresentation />
