@@ -7,9 +7,6 @@ export default function Footer() {
   return (
     <footer>
       <ul>
-        <li>
-          21 cours Aristide Briand 84100 Orange
-        </li>
         <li className="footer-middle">
           <a href={`tel:${number}`}>
             {number}
