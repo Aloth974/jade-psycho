@@ -9,7 +9,7 @@ import Header from "@/app/components/layout/header";
 import Main from "@/app/components/layout/main";
 import RichSnippet from "@/app/components/seo/rich-snippet";
 import SocialNetworks from "@/app/components/layout/social-networks";
-import metadataConfiguration from "@/app/components/seo/metadataConfiguration";
+import metadataConfiguration from "@/app/components/seo/metadata";
 
 config.autoAddCss = false
 
