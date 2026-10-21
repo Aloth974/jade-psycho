@@ -10,12 +10,12 @@ export default function SocialNetworks() {
     <div className="social-networks">
       <ul>
         <li>
-          <a href={site.socials.facebook} target="_blank" rel="noreferrer">
+          <a href={site.socials.facebook} target="_blank" rel="noreferrer" aria-label="Facebook">
             <FontAwesomeIcon icon={faFacebook} />
           </a>
         </li>
         <li>
-          <a href={site.socials.instagram} target="_blank" rel="noreferrer">
+          <a href={site.socials.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
             <FontAwesomeIcon icon={faInstagram} />
           </a>
         </li>

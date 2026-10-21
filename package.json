@@ -11,7 +11,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "push": "gh-pages -d out --nojekyll --cname www.jade-psycho.fr",
-    "deploy": "npm run build && npm run push"
+    "deploy": "npm run build && npm run push",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -23,6 +24,8 @@
     "sass": "^1.81.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "1.56",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -38,5 +41,10 @@
     "react",
     "nextjs"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "@axe-core/playwright": {
+      "playwright-core": "$@playwright/test"
+    }
+  }
 }

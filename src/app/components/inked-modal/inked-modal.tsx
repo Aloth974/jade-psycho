@@ -5,100 +5,110 @@ import React from 'react';
 import './inked-modal.scss';
 import ModalButton from '../modal-button/modal-button';
 
-export default function InkPage({ buttonText, children, title }: Readonly<{
+type Phase = 'closed' | 'opening' | 'open' | 'closing';
+
+// Time for the ink sprite to cover the screen before the dialog appears
+const OPENING_MS = 600;
+// Length of the reverse ink animation (see .closing in inked-modal.scss)
+const CLOSING_MS = 800;
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+export default function InkedModal({ buttonText, children, title }: Readonly<{
   buttonText: string;
   children: React.ReactNode;
   title: string;
 }>) {
-  const [layerDimensions, setLayerDimensions] = React.useState({ height: '0px', width: '0px' });
-  const [isTransitioning, setTransitioning] = React.useState(false);
-  const [isClosing, setClosing] = React.useState(false);
-  const [modalOpened, setModalOpened] = React.useState(false);
-  const [resize, setResize] = React.useState(false);
+  const titleId = React.useId();
+  const dialogRef = React.useRef<HTMLDialogElement>(null);
+  const timerRef = React.useRef<number>();
+  const [phase, setPhase] = React.useState<Phase>('closed');
 
-  const frameProportion = 1.78; //png frame aspect ratio
-  const frames = 25; //number of png frames
+  React.useEffect(() => () => window.clearTimeout(timerRef.current), []);
+
+  const showDialog = () => {
+    if (!dialogRef.current?.open) {
+      dialogRef.current?.showModal();
+    }
+    setPhase('open');
+  };
+
+  const hideDialog = () => {
+    dialogRef.current?.close();
+    setPhase('closed');
+  };
 
   const handleOpen = () => {
-    setTransitioning(true);
-    setTimeout(function () {
-      setModalOpened(true);
-    }, 600);
+    if (phase !== 'closed') {
+      return;
+    }
+    if (prefersReducedMotion()) {
+      showDialog();
+      return;
+    }
+    setPhase('opening');
+    timerRef.current = window.setTimeout(showDialog, OPENING_MS);
   };
 
   const handleClose = () => {
-    setClosing(true);
-    setModalOpened(false);
-    // transitionBackground.one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function () {
-    //   transitionLayer.removeClass('closing opening visible');
-    //   transitionBackground.off('webkitAnimationEnd oanimationend msAnimationEnd animationend');
-    // });
-
-    setTimeout(function () {
-      setClosing(false);
-      setTransitioning(false);
-      setModalOpened(false);
-    }, 600);
+    if (phase !== 'open') {
+      return;
+    }
+    if (prefersReducedMotion()) {
+      hideDialog();
+      return;
+    }
+    setPhase('closing');
+    timerRef.current = window.setTimeout(hideDialog, CLOSING_MS);
   };
 
-  function updateLayerDimensions() {
-    let layerHeight, layerWidth;
+  // Escape: run our closing animation instead of the browser's instant close
+  const handleCancel = (event: React.SyntheticEvent<HTMLDialogElement>) => {
+    event.preventDefault();
+    handleClose();
+  };
 
-    if (window.innerWidth / window.innerHeight > frameProportion) {
-      layerWidth = window.innerWidth;
-      layerHeight = layerWidth / frameProportion;
-    } else {
-      layerHeight = window.innerHeight * 1.2;
-      layerWidth = layerHeight * frameProportion;
-    }
+  // The browser can still close the dialog on its own (e.g. a repeated Escape)
+  const handleDialogClose = () => {
+    window.clearTimeout(timerRef.current);
+    setPhase('closed');
+  };
 
-    setLayerDimensions({ height: `${layerHeight}px`, width: `${layerWidth * frames}px` })
-
-    setResize(false);
-  }
-
-  React.useEffect(() => {
-    updateLayerDimensions();
-
-    const resizeCallback = () => {
-      if (!resize) {
-        setResize(true);
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        (!window.requestAnimationFrame) ? setTimeout(updateLayerDimensions, 300) : window.requestAnimationFrame(updateLayerDimensions);
-      }
-    };
-
-    window.addEventListener('resize', resizeCallback);
-    setResize(false);
-
-    return window.removeEventListener('resize', resizeCallback);
-  }, [resize, setResize]);
+  const layerClass = {
+    closed: '',
+    opening: ' visible opening',
+    open: ' visible opening',
+    closing: ' visible closing',
+  }[phase];
 
   return (
     <>
-      <div className="cd-main-content">
-        <div className="center">
-          <ModalButton onClick={handleOpen}>
-            {buttonText}
-          </ModalButton>
-        </div>
-      </div>
+      <ModalButton onClick={handleOpen} aria-haspopup="dialog">
+        {buttonText}
+      </ModalButton>
 
-      <div className={`cd-modal${modalOpened ? ' visible' : ''}`}>
+      <dialog
+        ref={dialogRef}
+        className={`cd-modal${phase === 'closing' ? ' closing' : ''}`}
+        aria-labelledby={titleId}
+        onCancel={handleCancel}
+        onClose={handleDialogClose}
+      >
+        <button type="button" className="modal-close" aria-label="Fermer" onClick={handleClose} />
         <div className="modal-content">
-          <h2>
+          <h2 id={titleId}>
             {title}
           </h2>
           <div className="modal-content-text">
             {children}
           </div>
         </div>
+      </dialog>
 
-        <a href="#0" className="modal-close" onClick={handleClose}>Close</a>
-      </div>
-
-      <div className={`cd-transition-layer${isTransitioning ? ' visible opening' : ''}${isClosing ? ' closing' : ''}`}>
-        <div className="bg-layer" style={layerDimensions}></div>
+      <div className={`cd-transition-layer${layerClass}`} aria-hidden="true">
+        <div className="bg-layer" />
       </div>
     </>
   );
