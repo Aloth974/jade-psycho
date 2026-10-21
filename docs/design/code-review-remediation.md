@@ -1,6 +1,6 @@
 # Design: code review remediation for jade-psycho.fr
 
-- **Status:** Proposed — owner decisions recorded in §5
+- **Status:** Ready to implement — owner decisions recorded in §5
 - **Date:** 2026-10-21
 - **Scope:** the whole repository at `3e24a34` (Next.js 14 static export deployed to GitHub Pages)
 
@@ -102,7 +102,8 @@ Create `src/config/site.ts`:
 ```ts
 export const site = {
   name: 'Jade Techer',
-  title: 'Jade Techer – <profession title, see §5.1> à Orange (84)',
+  title: 'Jade Techer – Psychopraticienne à Orange (84)',
+  jobTitle: 'Psychopraticienne', // not "psychologue", a protected title (§5.1)
   description: 'Accompagnement psychologique, formations et analyse de pratiques professionnelles à Orange (84100).',
   url: 'https://www.jade-psycho.fr',
   locale: 'fr_FR',
@@ -168,14 +169,13 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
   `authors` names the practitioner. A developer credit, and the CC BY 4.0 attribution the Luciole font requires (Laurent Bourcellier & Jonathan
   Perez), go in the README.
 - Add `src/app/opengraph-image.jpg` (1200×630) so Next emits `og:image` with absolute URLs. Per §5.1, this is a
-  branded card: the existing background artwork, cropped to 1200×630, with "Jade Techer", the profession
-  title, and the three services (Soins à la personne · Formations · Analyse de pratiques) in Luciole, plus
+  branded card: the existing background artwork, cropped to 1200×630, with "Jade Techer", "Psychopraticienne", and the three services (Soins à la personne · Formations · Analyse de pratiques) in Luciole, plus
   "Orange (84)". It is a static, committed JPEG (under 300 KB) so it works with `output: "export"` and
   needs no build-time image generation.
 - Add `src/app/robots.ts` and `src/app/sitemap.ts`, both with `export const dynamic = 'force-static'` so they
   work with `output: "export"`.
-- Rewrite the JSON-LD from `site`: `@type: "ProfessionalService"` (a `LocalBusiness` subtype; use
-  `MedicalBusiness` only if the profession title in §5.1 is a regulated health title), `name`, `url`,
+- Rewrite the JSON-LD from `site`: `@type: "ProfessionalService"` (a `LocalBusiness` subtype; not `MedicalBusiness`, since
+  *psychopraticienne* is not a regulated health title), `name`, `url`,
   `telephone` in E.164, `email`, `sameAs: [facebook, instagram]`, `openingHoursSpecification`, and `image`
   pointing at the OG image. **Remove `address` and `geo`**, since they are no longer accurate (§5.1). If a new
   practice address exists later, `areaServed: "Orange (84100)"` can be added in the meantime and the address
@@ -271,7 +271,9 @@ Steps 1 and 2 have no dependencies and can ship right away. Steps 3–6 can run 
 
 ## 5. Owner decisions
 
-### 5.1 Decided (2026-10-21)
+All owner decisions are made (2026-10-21).
+
+### 5.1 Decided
 
 | Topic | Decision | Effect on the design |
 | --- | --- | --- |
@@ -279,14 +281,8 @@ Steps 1 and 2 have no dependencies and can ship right away. Steps 3–6 can run 
 | Instagram (F1) | `https://www.instagram.com/jade_psychoprat/` | Used in `site.ts` and `sameAs`. Ships in step 1. |
 | Dark mode (F5) | Light design only. | Remove the dark media query, declare `color-scheme: light` (§3.4). |
 | Tailwind (M7) | Remove it (recommended: it is used for two classes and all styling is already SCSS). | §3.4. |
+| Professional title | *Psychopraticienne*. | Used in `site.ts` (`title`, `jobTitle`), the description, the OG card and the JSON-LD. The copy must never call Jade *psychologue*, which is a protected title (loi n° 85-772, art. 44); mentioning her psychology degree, as `presentation.tsx` does, is fine. |
 | Open Graph image | Branded 1200×630 card built from the existing background artwork with name, title, services and "Orange (84)". A portrait photo of Jade could replace it later if she wants a more personal preview. | §3.3. |
-
-### 5.2 Still open
-
-1. **Professional title.** The Instagram handle (`jade_psychoprat`) suggests *psychopraticienne*, while the
-   site name says "Psycho". *Psychologue* is a protected title in France (loi n° 85-772, art. 44): it may be
-   used only by people registered with the required master's degree. The page title, description, OG card
-   and JSON-LD type must use Jade's exact title, so this has to be confirmed before step 3.
 
 ## 6. Out of scope
 
