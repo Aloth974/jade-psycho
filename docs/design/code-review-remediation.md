@@ -90,7 +90,6 @@ only shows up in some conditions, or a security/maintenance risk; **Low** = clea
 | --- | --- | --- | --- |
 | C1 | Medium | `presentation.tsx` | Typos and grammar: "je suis sensibiliser" → "sensibilisée"; "que vous rencontrer" → "rencontrez"; "mon permis" → "m'ont permis"; "troubles déficitaire" → "déficitaires"; stray commas in "Neuro développementaux,", "confiance, en soi" and "milieu, petite enfance"; "Avec" capitalized mid-sentence; "parents ." spacing; "d'accompagnant aux enfants" → "d'accompagnants d'enfants". |
 | C2 | Low | `page.tsx:13` | The title "Présentation personnelle " has a trailing space. |
-| C3 | Low | n/a | No "mentions légales" page. French law (LCEN art. 6) requires one on a professional site, and psychologists normally display their professional registration number. **Design in §3.7; this is not legal advice.** |
 
 ## 3. Design
 
@@ -166,7 +165,8 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
 - Replace `metadataConfiguration.tsx` with a typed `metadata` export built from `site`: `metadataBase`,
   `title` (with a `template` for future pages), `description`, `alternates.canonical: '/'`,
   `openGraph: { type: 'website', locale, url, siteName, images }`, `twitter.card: 'summary_large_image'`.
-  `authors` names the practitioner. A developer credit can go in the README instead.
+  `authors` names the practitioner. A developer credit, and the CC BY 4.0 attribution the Luciole font requires (Laurent Bourcellier & Jonathan
+  Perez), go in the README.
 - Add `src/app/opengraph-image.jpg` (1200×630) so Next emits `og:image` with absolute URLs. Per §5.1, this is a
   branded card: the existing background artwork, cropped to 1200×630, with "Jade Techer", the profession
   title, and the three services (Soins à la personne · Formations · Analyse de pratiques) in Luciole, plus
@@ -255,34 +255,6 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
   5. the JSON-LD parses and has a valid `@type`.
 - Add Dependabot (`.github/dependabot.yml`, npm + github-actions, monthly) so D1 does not happen again.
 
-### 3.7 "Mentions légales" page (fixes C3)
-
-Add a static route `src/app/mentions-legales/page.tsx` with its own `metadata` (`robots: { index: true }`,
-title "Mentions légales"), linked from the footer. It reads contact data from `site.ts` and contains the
-sections below. This is a suggested structure based on common practice for French professional sites
-(LCEN art. 6-III, RGPD, Code de la consommation); it is not legal advice and should be checked against
-Jade's actual status.
-
-1. **Éditeur du site:** full name (Jade Techer), status (e.g. entrepreneur individuel / micro-entreprise),
-   SIRET number, professional address (a current practice address or a domiciliation address: LCEN asks
-   for one even though the site no longer shows it elsewhere), phone and email.
-2. **Profession:** exact professional title and, if it is a regulated title (e.g. *psychologue*), the
-   diploma and the registration number (ADELI / RPPS). See §5.1 on the title.
-3. **Directeur de la publication:** Jade Techer.
-4. **Hébergeur:** GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA
-   (site served by GitHub Pages). Check the address at publication time.
-5. **Données personnelles:** the site sets no cookies and loads no tracking or third-party scripts (so no
-   consent banner is needed). Data sent by phone or email is used only to answer the request and is not
-   shared. State the retention period, the data controller (Jade Techer), the RGPD rights (access,
-   rectification, erasure, objection) with the contact email, and the right to complain to the CNIL.
-6. **Médiation de la consommation:** professionals who provide paid services to consumers must offer a
-   free consumer mediator (Code de la consommation, art. L612-1). Give the mediator's name and website once
-   Jade has signed up with one.
-7. **Propriété intellectuelle et crédits:** content and images © Jade Techer. The **Luciole** font is under
-   CC BY 4.0 and requires attribution (Laurent Bourcellier & Jonathan Perez, luciole-vision.com); the Font
-   Awesome brand icons are under CC BY 4.0. Site development credit (Olivier Leclercq) can go here as well,
-   rather than in the page metadata.
-
 ## 4. Rollout plan
 
 | Step | PR | Contents | Findings | Risk |
@@ -294,7 +266,6 @@ Jade's actual status.
 | 5 | Layout, fonts, assets | Custom properties, layout without magic numbers, fonts, image conversion, Tailwind decision | M5–M7, M10, A3, A6 | Medium; check visually on mobile, tablet, desktop |
 | 6 | Content | Semantic markup + copy corrections, after Jade's review | A5, C1, C2 | Low |
 | 7 | Framework upgrade | Next 16 / React 19 / ESLint 9 | D1 (step 2) | Medium; CI and tests from steps 2 and 4 cover it |
-| 8 | Legal page | `/mentions-legales` page per §3.7, linked from the footer | C3 | Low; needs the details in §5.2 |
 
 Steps 1 and 2 have no dependencies and can ship right away. Steps 3–6 can run in parallel after step 2.
 
@@ -309,19 +280,17 @@ Steps 1 and 2 have no dependencies and can ship right away. Steps 3–6 can run 
 | Dark mode (F5) | Light design only. | Remove the dark media query, declare `color-scheme: light` (§3.4). |
 | Tailwind (M7) | Remove it (recommended: it is used for two classes and all styling is already SCSS). | §3.4. |
 | Open Graph image | Branded 1200×630 card built from the existing background artwork with name, title, services and "Orange (84)". A portrait photo of Jade could replace it later if she wants a more personal preview. | §3.3. |
-| Mentions légales (C3) | Add a page with the structure in §3.7. | Rollout step 8. |
 
 ### 5.2 Still open
 
 1. **Professional title.** The Instagram handle (`jade_psychoprat`) suggests *psychopraticienne*, while the
    site name says "Psycho". *Psychologue* is a protected title in France (loi n° 85-772, art. 44): it may be
-   used only by people registered with the required master's degree. The page title, description, OG card,
-   JSON-LD type and mentions légales must use Jade's exact title, so this has to be confirmed before step 3.
-2. **Details for the mentions légales:** legal status and SIRET, a current professional or domiciliation
-   address (needed on that page even though the site no longer shows an address elsewhere), registration
-   number if the title is regulated, and the consumer mediator.
+   used only by people registered with the required master's degree. The page title, description, OG card
+   and JSON-LD type must use Jade's exact title, so this has to be confirmed before step 3.
 
 ## 6. Out of scope
+
+- A "mentions légales" page (dropped from scope by the owner on 2026-10-21).
 
 - Visual redesign beyond what the fixes need.
 - Analytics or cookie consent. The site sets no cookies and loads no third-party scripts today, and none of
