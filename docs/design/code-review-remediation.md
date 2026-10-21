@@ -1,6 +1,6 @@
 # Design: code review remediation for jade-psycho.fr
 
-- **Status:** Proposed
+- **Status:** Proposed — owner decisions recorded in §5
 - **Date:** 2026-10-21
 - **Scope:** the whole repository at `3e24a34` (Next.js 14 static export deployed to GitHub Pages)
 
@@ -55,7 +55,7 @@ only shows up in some conditions, or a security/maintenance risk; **Low** = clea
 | ID | Sev | Location | Finding |
 | --- | --- | --- | --- |
 | S1 | High | `components/seo/rich-snippet.tsx` | The JSON-LD is invalid or placeholder data: `"@type": "Psycho"` is not a schema.org type, `image` points at `example.com`, `addressRegion` is "Orange" (a city), and the phone number is not in international format. Google will ignore it or flag it. |
-| S2 | High | `rich-snippet.tsx:10-22` vs commit `3e24a34` | The last commit removed the street address from the footer, but it is still published in the JSON-LD (with GPS coordinates). If the removal was for privacy, it did not work. **Owner decision needed (§5).** |
+| S2 | High | `rich-snippet.tsx:10-22` vs commit `3e24a34` | The last commit removed the street address from the footer, but it is still published in the JSON-LD (with GPS coordinates). **Decided: remove (§5.1).** |
 | S3 | Medium | `layout.tsx:48-65` | `next/head` does nothing in the App Router. The `<Head>` block, including the `example.com` og:image and "our cool page" description, is dead code (confirmed: it is absent from `out/index.html`). |
 | S4 | Medium | `metadataConfiguration.tsx` | No `metadataBase`, canonical URL, `og:url`, `og:image`, `og:locale` (`fr_FR`), or `og:type`. Social shares show no image. The description has inconsistent casing ("84100 orange"). `authors` names the developer rather than the practitioner. |
 | S5 | Medium | `src/app/next/` | `/next` is a byte-for-byte duplicate of `/` (page and SCSS). It is exported and indexable, so it is duplicate content. |
@@ -90,7 +90,7 @@ only shows up in some conditions, or a security/maintenance risk; **Low** = clea
 | --- | --- | --- | --- |
 | C1 | Medium | `presentation.tsx` | Typos and grammar: "je suis sensibiliser" → "sensibilisée"; "que vous rencontrer" → "rencontrez"; "mon permis" → "m'ont permis"; "troubles déficitaire" → "déficitaires"; stray commas in "Neuro développementaux,", "confiance, en soi" and "milieu, petite enfance"; "Avec" capitalized mid-sentence; "parents ." spacing; "d'accompagnant aux enfants" → "d'accompagnants d'enfants". |
 | C2 | Low | `page.tsx:13` | The title "Présentation personnelle " has a trailing space. |
-| C3 | Low | n/a | No "mentions légales" page. French law (LCEN art. 6) requires one on a professional site, and psychologists normally display their professional registration number. **Owner decision needed (§5); this is not legal advice.** |
+| C3 | Low | n/a | No "mentions légales" page. French law (LCEN art. 6) requires one on a professional site, and psychologists normally display their professional registration number. **Design in §3.7; this is not legal advice.** |
 
 ## 3. Design
 
@@ -103,7 +103,7 @@ Create `src/config/site.ts`:
 ```ts
 export const site = {
   name: 'Jade Techer',
-  title: 'Jade Techer – Psychologue à Orange (84)',
+  title: 'Jade Techer – <profession title, see §5.1> à Orange (84)',
   description: 'Accompagnement psychologique, formations et analyse de pratiques professionnelles à Orange (84100).',
   url: 'https://www.jade-psycho.fr',
   locale: 'fr_FR',
@@ -111,9 +111,9 @@ export const site = {
   phone: { display: '07 59 60 30 77', e164: '+33759603077' },
   socials: {
     facebook: 'https://www.facebook.com/profile.php?id=61572511209865',
-    instagram: 'https://www.instagram.com/<handle>/', // TODO: real handle from owner
+    instagram: 'https://www.instagram.com/jade_psychoprat/',
   },
-  address: { /* optional, see §5 */ },
+  // No street address or GPS coordinates: the old ones are no longer accurate (§5.1).
   openingHours: [ /* same structure as today */ ],
 } as const;
 ```
@@ -167,14 +167,19 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
   `title` (with a `template` for future pages), `description`, `alternates.canonical: '/'`,
   `openGraph: { type: 'website', locale, url, siteName, images }`, `twitter.card: 'summary_large_image'`.
   `authors` names the practitioner. A developer credit can go in the README instead.
-- Add `src/app/opengraph-image.jpg` (1200×630) so Next emits `og:image` with absolute URLs. This needs an image
-  from the owner, or a crop of the existing background.
+- Add `src/app/opengraph-image.jpg` (1200×630) so Next emits `og:image` with absolute URLs. Per §5.1, this is a
+  branded card: the existing background artwork, cropped to 1200×630, with "Jade Techer", the profession
+  title, and the three services (Soins à la personne · Formations · Analyse de pratiques) in Luciole, plus
+  "Orange (84)". It is a static, committed JPEG (under 300 KB) so it works with `output: "export"` and
+  needs no build-time image generation.
 - Add `src/app/robots.ts` and `src/app/sitemap.ts`, both with `export const dynamic = 'force-static'` so they
   work with `output: "export"`.
-- Rewrite the JSON-LD from `site`: `@type: "LocalBusiness"` (or `"MedicalBusiness"`), `name`, `url`, `telephone`
-  in E.164, `email`, `sameAs: [facebook, instagram]`, `openingHoursSpecification`, and `image` pointing at the
-  real OG image. `address` and `geo` are included only if the owner confirms they should be public (§5); if
-  included, `addressRegion` becomes "Provence-Alpes-Côte d'Azur" (or "Vaucluse"). Keep the `<script>`, but
+- Rewrite the JSON-LD from `site`: `@type: "ProfessionalService"` (a `LocalBusiness` subtype; use
+  `MedicalBusiness` only if the profession title in §5.1 is a regulated health title), `name`, `url`,
+  `telephone` in E.164, `email`, `sameAs: [facebook, instagram]`, `openingHoursSpecification`, and `image`
+  pointing at the OG image. **Remove `address` and `geo`**, since they are no longer accurate (§5.1). If a new
+  practice address exists later, `areaServed: "Orange (84100)"` can be added in the meantime and the address
+  put back from `site.ts`. Keep the `<script>`, but
   escape `<` in the serialized JSON (`.replace(/</g, '\\u003c')`) as recommended in the Next.js docs.
 - Delete `src/app/next/` (route and SCSS). If the URL was ever shared, add a
   `src/app/next/page.tsx` that only renders `redirect('/')`. In a static export this becomes a meta-refresh
@@ -201,10 +206,10 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
 - **Fonts:** use one `localFont({ src: [{ path, weight: '400', style: 'normal' }, { …700 }, { …italic }],
   variable: '--font-luciole', display: 'swap' })` with the files converted to WOFF2 (Luciole is CC-BY, so
   conversion is allowed). Body text uses `var(--font-luciole)`.
-- **Tailwind:** remove it (along with `postcss.config.mjs` and `tailwind.config.ts`) and replace `h-full` and
-  `antialiased` with a few lines of CSS. This drops preflight and with it the manual list-style fixes. If more
-  Tailwind usage is planned, keep it instead and drop the SCSS duplication; the point is to have one styling
-  system.
+- **Tailwind:** remove it (along with `postcss.config.mjs`, `tailwind.config.ts` and the `tailwindcss` and
+  `postcss` dev dependencies) and replace `h-full` and `antialiased` with a few lines of CSS. All real styling
+  is already in SCSS, so this leaves one styling system, drops preflight and with it the manual list-style
+  fixes, and removes two dependencies from the audit surface (§5.1).
 - **Assets:** convert `background.png` and `modal-bg.jpg` to WebP or AVIF (with a JPEG fallback through
   `image-set()`) and recompress `ink.png` with lossless palette PNG or WebP. The aim is a cut of more than 60%
   of the first-load weight.
@@ -250,6 +255,34 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
   5. the JSON-LD parses and has a valid `@type`.
 - Add Dependabot (`.github/dependabot.yml`, npm + github-actions, monthly) so D1 does not happen again.
 
+### 3.7 "Mentions légales" page (fixes C3)
+
+Add a static route `src/app/mentions-legales/page.tsx` with its own `metadata` (`robots: { index: true }`,
+title "Mentions légales"), linked from the footer. It reads contact data from `site.ts` and contains the
+sections below. This is a suggested structure based on common practice for French professional sites
+(LCEN art. 6-III, RGPD, Code de la consommation); it is not legal advice and should be checked against
+Jade's actual status.
+
+1. **Éditeur du site:** full name (Jade Techer), status (e.g. entrepreneur individuel / micro-entreprise),
+   SIRET number, professional address (a current practice address or a domiciliation address: LCEN asks
+   for one even though the site no longer shows it elsewhere), phone and email.
+2. **Profession:** exact professional title and, if it is a regulated title (e.g. *psychologue*), the
+   diploma and the registration number (ADELI / RPPS). See §5.1 on the title.
+3. **Directeur de la publication:** Jade Techer.
+4. **Hébergeur:** GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA
+   (site served by GitHub Pages). Check the address at publication time.
+5. **Données personnelles:** the site sets no cookies and loads no tracking or third-party scripts (so no
+   consent banner is needed). Data sent by phone or email is used only to answer the request and is not
+   shared. State the retention period, the data controller (Jade Techer), the RGPD rights (access,
+   rectification, erasure, objection) with the contact email, and the right to complain to the CNIL.
+6. **Médiation de la consommation:** professionals who provide paid services to consumers must offer a
+   free consumer mediator (Code de la consommation, art. L612-1). Give the mediator's name and website once
+   Jade has signed up with one.
+7. **Propriété intellectuelle et crédits:** content and images © Jade Techer. The **Luciole** font is under
+   CC BY 4.0 and requires attribution (Laurent Bourcellier & Jonathan Perez, luciole-vision.com); the Font
+   Awesome brand icons are under CC BY 4.0. Site development credit (Olivier Leclercq) can go here as well,
+   rather than in the page metadata.
+
 ## 4. Rollout plan
 
 | Step | PR | Contents | Findings | Risk |
@@ -261,21 +294,32 @@ Optional follow-up (not required for the fixes): sync the open modal with the UR
 | 5 | Layout, fonts, assets | Custom properties, layout without magic numbers, fonts, image conversion, Tailwind decision | M5–M7, M10, A3, A6 | Medium; check visually on mobile, tablet, desktop |
 | 6 | Content | Semantic markup + copy corrections, after Jade's review | A5, C1, C2 | Low |
 | 7 | Framework upgrade | Next 16 / React 19 / ESLint 9 | D1 (step 2) | Medium; CI and tests from steps 2 and 4 cover it |
-| — | Legal page | "Mentions légales" page | C3 | Depends on the owner |
+| 8 | Legal page | `/mentions-legales` page per §3.7, linked from the footer | C3 | Low; needs the details in §5.2 |
 
 Steps 1 and 2 have no dependencies and can ship right away. Steps 3–6 can run in parallel after step 2.
 
-## 5. Decisions needed from the owner
+## 5. Owner decisions
 
-1. **Street address:** should "21 cours Aristide Briand, Orange" and the GPS coordinates stay public in the
-   structured data (S2)? Publishing them helps local search, but the last commit suggests they were removed on
-   purpose.
-2. **Instagram:** what is the real profile URL (F1)? If there is none, remove the icon.
-3. **Dark mode:** is the light-only design (§3.4) fine, or should a proper dark theme be designed?
-4. **Tailwind:** remove it, or adopt it for the whole site (§3.4)?
-5. **Open Graph image:** which photo or visual should represent the site when it is shared?
-6. **Mentions légales:** which details (professional registration number, host, publication director) should
-   appear (C3)?
+### 5.1 Decided (2026-10-21)
+
+| Topic | Decision | Effect on the design |
+| --- | --- | --- |
+| Street address + GPS (S2) | Remove them: they are no longer accurate. | `address` and `geo` are dropped from the JSON-LD and kept out of `site.ts` (§3.1, §3.3). Ships in step 1. |
+| Instagram (F1) | `https://www.instagram.com/jade_psychoprat/` | Used in `site.ts` and `sameAs`. Ships in step 1. |
+| Dark mode (F5) | Light design only. | Remove the dark media query, declare `color-scheme: light` (§3.4). |
+| Tailwind (M7) | Remove it (recommended: it is used for two classes and all styling is already SCSS). | §3.4. |
+| Open Graph image | Branded 1200×630 card built from the existing background artwork with name, title, services and "Orange (84)". A portrait photo of Jade could replace it later if she wants a more personal preview. | §3.3. |
+| Mentions légales (C3) | Add a page with the structure in §3.7. | Rollout step 8. |
+
+### 5.2 Still open
+
+1. **Professional title.** The Instagram handle (`jade_psychoprat`) suggests *psychopraticienne*, while the
+   site name says "Psycho". *Psychologue* is a protected title in France (loi n° 85-772, art. 44): it may be
+   used only by people registered with the required master's degree. The page title, description, OG card,
+   JSON-LD type and mentions légales must use Jade's exact title, so this has to be confirmed before step 3.
+2. **Details for the mentions légales:** legal status and SIRET, a current professional or domiciliation
+   address (needed on that page even though the site no longer shows an address elsewhere), registration
+   number if the title is regulated, and the consumer mediator.
 
 ## 6. Out of scope
 
