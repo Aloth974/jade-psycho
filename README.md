@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# jade-psycho.fr
 
-## Getting Started
+Website of Jade Techer, psychopraticienne in Orange (84): https://www.jade-psycho.fr
 
-First, run the development server:
+A [Next.js](https://nextjs.org) App Router site exported as static HTML (`output: "export"`) and hosted on
+GitHub Pages.
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` | Static export to `out/` |
+| `npm start` | Serve `out/` locally (run `npm run build` first) |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project layout
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/layout.tsx`: page shell (header, main, footer) and metadata
+- `src/app/page.tsx`: home page, one `InkedModal` per section
+- `src/app/components/content/`: the French copy shown in each modal
+- `src/app/components/inked-modal/`: the modal with the ink transition
+- `src/app/components/seo/`: metadata and JSON-LD structured data
+- `public/`: files copied as-is to the site root (`CNAME`, `.nojekyll`)
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+Every push to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which builds the site
+and publishes `out/` to GitHub Pages. This requires **Settings → Pages → Source: GitHub Actions** on the
+repository. The custom domain comes from `public/CNAME`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs lint, build and type checks on every pull request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Credits
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Development: Olivier Leclercq ([@Aloth974](https://github.com/Aloth974))
+- Font: [Luciole](https://www.luciole-vision.com/) by Laurent Bourcellier & Jonathan Perez, CC BY 4.0
+- Icons: [Font Awesome](https://fontawesome.com/) brand icons, CC BY 4.0

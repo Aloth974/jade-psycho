@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "serve out",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "push": "gh-pages -d out --nojekyll --cname www.jade-psycho.fr",
     "deploy": "npm run build && npm run push"
   },
@@ -29,6 +30,7 @@
     "eslint-config-next": "14.2.35",
     "gh-pages": "^6.2.0",
     "postcss": "^8",
+    "serve": "^14.2.6",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
