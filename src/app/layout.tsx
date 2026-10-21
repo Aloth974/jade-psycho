@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Head from "next/head";
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 
@@ -45,24 +44,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="h-full">
-      <Head>
-        <title>
-          {metadata.title as string}
-        </title>
-        <meta
-          name="description"
-          content={metadata.description as string}
-          key="desc"
-        />
-        <meta
-          property="og:description"
-          content="And a social description for our cool page"
-        />
-        <meta
-          property="og:image"
-          content="https://example.com/images/cool-page.jpg"
-        />
-      </Head>
       <body
         className={`h-full ${lucioleRegular.variable} ${lucioleBold.variable} ${lucioleRegularItalic.variable} ${lucioleBoldItalic.variable} antialiased`}
       >

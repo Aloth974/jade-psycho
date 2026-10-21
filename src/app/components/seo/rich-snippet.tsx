@@ -7,19 +7,6 @@ const richSnippetData = {
     "https://example.com/photos/16x9/photo.jpg"
   ],
   "name": "Jade Psycho",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "21 cours Aristide Briand",
-    "addressLocality": "Orange",
-    "addressRegion": "Orange",
-    "postalCode": "84100",
-    "addressCountry": "FR"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 44.13581162113809,
-    "longitude": 4.804875897495294
-  },
   "url": "https://www.jade-psycho.fr",
   "telephone": "0759 60 30 77",
   "openingHoursSpecification": [

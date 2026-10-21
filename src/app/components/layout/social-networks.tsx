@@ -5,7 +5,7 @@ import './social-networks.scss';
 
 export default function SocialNetworks() {
   const facebookUrl: string = `https://www.facebook.com/profile.php?id=61572511209865`;
-  const instagramUrl: string = `https://www.facebook.com/profile.php?id=61572511209865`;
+  const instagramUrl: string = `https://www.instagram.com/jade_psychoprat/`;
 
   return (
     <div className="social-networks">

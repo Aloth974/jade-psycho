@@ -4,14 +4,9 @@ import React from 'react';
 
 import './modal-button.scss';
 
-export default function ModalButton({ children, className, ...restProps }: Readonly<{
-  children: React.ReactNode;
-  className?: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
-  [x: string]: unknown;
-}>) {
+export default function ModalButton({ children, className, type = 'button', ...restProps }: Readonly<React.ComponentPropsWithoutRef<'button'>>) {
   return (
-    <button className={`modal-button ${className}`} {...restProps}>
+    <button type={type} className={['modal-button', className].filter(Boolean).join(' ')} {...restProps}>
       {children}
     </button>
   );
